@@ -41,9 +41,6 @@ add_dependencies(turtlesim_node turtlesim_gencpp)
 add_executable(teleop_key tutorials/teleop_turtle_key.cpp)
 target_link_libraries(teleop_key ${catkin_LIBRARIES})
 add_dependencies(teleop_key turtlesim_gencpp)
-add_executable(teleop_key2 tutorials/teleop_turtle_key2.cpp)
-target_link_libraries(teleop_key2 ${catkin_LIBRARIES})
-add_dependencies(teleop_key teleop_key2 turtlesim_gencpp)
 install(TARGETS turtlesim_node teleop_key 
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 

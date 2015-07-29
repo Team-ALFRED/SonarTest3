@@ -4,7 +4,7 @@
 #include <termios.h>
 #include <stdio.h>
 #include "std_msgs/String.h" // added by Rachel 
-#include "std_msgs/Int32.h" // added by Rachel 
+#include "std_msgs/Int64.h" // added by Rachel 
 #include <sstream>
 
 
@@ -27,7 +27,7 @@ void quit(int sig)
 /* added by Rachel */
 
 
-void chatterCallback(const std_msgs::Int32::ConstPtr& msg)
+void chatterCallback(const std_msgs::Int64::ConstPtr& msg)
 {
   char c;
   bool dirty=false;

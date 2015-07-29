@@ -20,31 +20,20 @@ ros::NodeHandle  n1;
 ros::NodeHandle  n2; 
 
 std_msgs::Int64 ultra_1;
-//std_msgs::Int32 ultra_2; 
-ros::Publisher sensor1("sensor1", &ultra_1);
-//ros::Publisher sensor2("sensor2", &ultra_2); 
+ros::Publisher sensor1("sensor1", &ultra_1); 
   
 void setup(){
   Wire.begin();                                   // Initialize the I2C bus
   n1.initNode();                                  // init ros node
-  //n2.initNode();                                  // init ros node
-  n1.advertise(sensor1);                          // set ros node name   
-  //n2.advertise(sensor2);                          // set ros node name 
-  //Serial.begin(57600); 
+  n1.advertise(sensor1);                          // set ros node name  
 }
  
 void loop(){
   ultra_1.data = getRange(srf1Address)<<7;// + getRange(srf2Address);                      // Calls a function to get the range data 
   ultra_1.data = ultra_1.data + getRange(srf2Address); 
-  //ultra_2.data = getRange(srf2Address);                      // Calls a function to get the range data 
-  
-  
   
   sensor1.publish(&ultra_1);
-  //Serial.println("here");  
-  //sensor2.publish(&ultra_2);
-  n1.spinOnce(); 
-  //n2.spinOnce(); 
+  n1.spinOnce();
   delay(1000);                                      // Wait before looping
 }
 
