@@ -41,7 +41,7 @@ void chatterCallback(const std_msgs::Int64::ConstPtr& msg)
   
   if(sensor1 < 20)
   {
-    angular = 1.0; 
+    angular = 0.5;
     dirty = true; 
   }
   else if(sensor1 > 20)
@@ -52,7 +52,7 @@ void chatterCallback(const std_msgs::Int64::ConstPtr& msg)
   
   if(sensor2 < 20)
   {
-    linear = 1.0; 
+    linear = 0.5; 
     dirty = true; 
   }
   else if(sensor2 > 20)
@@ -97,7 +97,7 @@ int main(int argc, char** argv)
 
   nh_.param("scale_angular", a_scale, a_scale);
   nh_.param("scale_linear", l_scale, l_scale);
-  twist_pub_ = nh_.advertise<geometry_msgs::Twist>("turtle1/cmd_vel", 1);
+  twist_pub_ = nh_.advertise<geometry_msgs::Twist>("cmd_vel", 1);
 
 
   ros::Subscriber sub = n.subscribe("sensor1", 10, chatterCallback);
