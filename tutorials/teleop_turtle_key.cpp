@@ -31,41 +31,43 @@ void chatterCallback(const std_msgs::Int64::ConstPtr& msg)
 {
   char c;
   bool dirty=false;
-  int sensor1;
-  int sensor2; 
+  int sensor1; // left 
+  int sensor2; // middle
+  int sensor3; // right
 
-  sensor1 = msg->data >> 7; 
-  sensor2 = msg->data & 0x007F; 
+  sensor1 = (msg->data >> 14) & 0x007F; 
+  sensor2 = (msg->data >> 7) & 0x007F;
+  sensor3 = msg->data & 0x007f;  
 
-  ROS_INFO("I heard: [%d] = [%d] [%d]", msg->data,sensor1,sensor2);
+  ROS_INFO("I heard: [%d] = [%d] [%d] [%d]", msg->data,sensor1,sensor2,sensor3);
   
-  if(sensor1 < 20)
+  if(sensor1 < 40)
   {
-    angular = 0.5;
+    angular = 0.25;
     dirty = true; 
   }
-  else if(sensor1 > 20)
+  else if(sensor3 < 40)
   {
-    angular = 0;
+    angular = -0.25;
     dirty = true;
   }
-  
-  if(sensor2 < 20)
+  else 
   {
-    linear = 0.5; 
+    angular = 0; 
     dirty = true; 
   }
-  else if(sensor2 > 20)
+  
+  if(sensor2 > 40)
+  {
+    linear = 0.25; 
+    dirty = true; 
+  }
+  else
   {
     linear = 0;
     dirty = true;
   }
   
-
-
-
-
-
   geometry_msgs::Twist twist;
   twist.angular.z = a_scale*angular;
   twist.linear.x = l_scale*linear;
@@ -100,7 +102,7 @@ int main(int argc, char** argv)
   twist_pub_ = nh_.advertise<geometry_msgs::Twist>("cmd_vel", 1);
 
 
-  ros::Subscriber sub = n.subscribe("sensor1", 10, chatterCallback);
+  ros::Subscriber sub = n.subscribe("sensor", 10, chatterCallback);
   ros::spin();
   return(0);
 }
