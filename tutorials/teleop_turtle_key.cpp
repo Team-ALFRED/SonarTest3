@@ -4,7 +4,7 @@
 #include <termios.h>
 #include <stdio.h>
 #include "std_msgs/String.h" // added by Rachel 
-#include "std_msgs/Int64.h" // added by Rachel 
+#include "std_msgs/UInt64.h" // added by Rachel 
 #include <sstream>
 
 
@@ -27,21 +27,21 @@ void quit(int sig)
 /* added by Rachel */
 
 
-void chatterCallback(const std_msgs::Int64::ConstPtr& msg)
+void chatterCallback(const std_msgs::UInt64::ConstPtr& msg)
 {
   char c;
   bool dirty=false;
-  int sensor1; // left 
-  int sensor2; // middle
-  int sensor3; // right
+  unsigned int sensor1 = 0; // left 
+  unsigned int sensor2 = 0; // middle
+  unsigned int sensor3 = 0; // right
 
-  sensor1 = (msg->data >> 14) & 0x007F; 
-  sensor2 = (msg->data >> 7) & 0x007F;
-  sensor3 = msg->data & 0x007f;  
+  sensor1 = (msg->data >> 14) & 0x3f; 
+  sensor2 = (msg->data >> 7) & 0x3f;
+  sensor3 = msg->data & 0x3f;  
 
   ROS_INFO("I heard: [%d] = [%d] [%d] [%d]", msg->data,sensor1,sensor2,sensor3);
   
-  if(sensor1 < 40)
+/*  if(sensor1 < 40)
   {
     angular = 0.25;
     dirty = true; 
@@ -77,7 +77,7 @@ void chatterCallback(const std_msgs::Int64::ConstPtr& msg)
     twist_pub_.publish(twist);    
     dirty=false;
   }
-  return;
+ */ return;
 }
 
 
