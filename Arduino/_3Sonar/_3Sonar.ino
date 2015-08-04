@@ -8,30 +8,33 @@ be a constant value.
 #define cmdByte 0x00                              // Command byte
 #define lightByte 0x01                            // Byte to read light sensor
 #define rangeByte 0x02                            // Byte for start of ranging data
-#define srf1Address 0x79
-#define srf2Address 0x70
-#define srf3Address 0x71
+#define srf3Address 0x79                          // F2
+#define srf2Address 0x71                          // E2
+#define srf1Address 0x70                          // E0
 
 #include <Wire.h>
 #include <ros.h>
 #include <sensor_msgs/Range.h>
-#include <std_msgs/Int64.h>
+#include <std_msgs/Int16MultiArray.h>
 
 ros::NodeHandle  n;
 
-std_msgs::Int64 ultra;
+std_msgs::Int16MultiArray ultra;
 ros::Publisher sensor("sensor", &ultra); 
   
 void setup(){
   Wire.begin();                                   // Initialize the I2C bus
   n.initNode();                                  // init ros node
-  n.advertise(sensor);                          // set ros node name  
+  n.advertise(sensor);                          // set ros node name   
+//  changeAddress(srf2Address,0xE0);
+  ultra.data_length = 4;
+
 }
  
 void loop(){
-  ultra.data = getRange(srf1Address)<<14;// + getRange(srf2Address);                      // Calls a function to get the range data 
-  ultra.data = ultra.data + (getRange(srf2Address)<<7); 
-  ultra.data = ultra.data + getRange(srf3Address); 
+  ultra.data[1] = getRange(srf1Address);        // Calls a function to get the range data 
+  ultra.data[2] = getRange(srf2Address); 
+  ultra.data[3] = getRange(srf3Address); 
   sensor.publish(&ultra);
   n.spinOnce();
   delay(1000);                                      // Wait before looping
