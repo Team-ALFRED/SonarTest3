@@ -31,15 +31,62 @@ void chatterCallback(const std_msgs::Int16MultiArray::ConstPtr& msg)
 {
   char c;
   bool dirty=false;
+  double sensor1 = (msg->data[1]) * 0.004;
+  double sensor2 = (msg->data[2]) * 0.004;
+  double sensor3 = (msg->data[3]) * 0.004;
+
+  if(sensor1 > 0.4)
+  {
+    sensor1 = 0.4;
+  }
+
+  if(sensor2 > 0.4)
+  {
+    sensor2 = 0.4;
+  }
+ 
+  if(sensor3 > 0.4)
+  {
+    sensor3 = 0.4;
+  }
 
   ROS_INFO("I heard: [%d] [%d] [%d]", msg->data[1],msg->data[2],msg->data[3]);
   
-  if(sensor1 < 70)
+  linear = sensor2 - 0.18;
+
+  angular = sensor2 - sensor1 ; 
+  dirty = true; 
+  if(linear > 0.4)
+  {
+    linear = 0.4;
+  }
+
+  else if(linear < -0.4)
+  {
+    linear = -0.4;
+  }
+
+  else if(linear > 0 && linear < 0.05)
+  {
+    angular = 0.4; 
+  }  
+
+
+  if(angular > 0.4)
+  {
+    angular = 0.4;
+  }
+
+  if(angular < -0.4)
+  {
+    angular = -0.4;
+  }
+  /*if(sensor1 < 50)
   {
     angular = 0.25;
     dirty = true; 
   }
-  else if(sensor3 < 70)
+  else if(sensor3 < 50)
   {
     angular = -0.25;
     dirty = true;
@@ -50,7 +97,7 @@ void chatterCallback(const std_msgs::Int16MultiArray::ConstPtr& msg)
     dirty = true; 
   }
   
-  if(sensor2 > 70)
+  if(sensor2 > 50)
   {
     linear = 0.25; 
     dirty = true; 
@@ -60,7 +107,7 @@ void chatterCallback(const std_msgs::Int16MultiArray::ConstPtr& msg)
     linear = 0;
     dirty = true;
   }
-  
+  */
   geometry_msgs::Twist twist;
   twist.angular.z = a_scale*angular;
   twist.linear.x = l_scale*linear;

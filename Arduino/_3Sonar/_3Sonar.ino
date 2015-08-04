@@ -37,7 +37,7 @@ void loop(){
   ultra.data[3] = getRange(srf3Address); 
   sensor.publish(&ultra);
   n.spinOnce();
-  delay(1000);                                      // Wait before looping
+  delay(10);                                      // Wait before looping
 }
 
 void changeAddress(byte oldAddress, byte newAddress)
